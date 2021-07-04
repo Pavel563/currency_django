@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<table border="1">
+<caption>Source Details</caption>
+   <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>URL</th>
+   </tr>
+{% if object %}
+    <tr><td>{{ object.id }}</td><td>{{ object.name }}</td><td>{{ object.url }}</td></tr>
+{% endif %}
+</table>
+</body>
+</html>

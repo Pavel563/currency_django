@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+<table border="1">
+   <caption>Source</caption>
+   <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>URL</th>
+   </tr>
+{% for source in objects %}
+    <tr><td>{{ source.id }}</td><td>{{ source.name }}</td><td>{{ source.url }}</td></tr>
+{% endfor %}
+</table>
+<!--{% for source in objects %}-->
+<!--    <p>-->
+<!--        ID: {{ source.id }}-->
+<!--        Name: {{ source.name }}-->
+<!--        URL: {{ source.url }}-->
+<!--    </p>-->
+<!--{% endfor %}-->
+
+
+</body>
+</html>

@@ -14,17 +14,10 @@
     <th>URL</th>
    </tr>
 {% for source in objects %}
-    <tr><td>{{ source.id }}</td><td>{{ source.name }}</td><td>{{ source.url }}</td></tr>
+    <tr><td>{{ source.id }}</td><td>{{ source.name }}</td><td>{{ source.url }}</td><td><a href="/currency/source/update/{{ source.id }}">Edit</a></td></tr>
+
 {% endfor %}
 </table>
-<!--{% for source in objects %}-->
-<!--    <p>-->
-<!--        ID: {{ source.id }}-->
-<!--        Name: {{ source.name }}-->
-<!--        URL: {{ source.url }}-->
-<!--    </p>-->
-<!--{% endfor %}-->
-
 
 </body>
 </html>

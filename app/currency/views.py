@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from currency.utils import generate_password as gp
 from currency.models import Rate, Source
-from currency.forms import RateForm
+from currency.forms import RateForm, SourceForm, ContactForm
 from annoying.functions import get_object_or_None
 
 
@@ -83,7 +83,68 @@ def rate_delete(request, pk):
 
 
 ########################################################################################################################
+################################ Домашняя работа 8 #####################################################################
 
+def source_create(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        form = SourceForm(form_data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/source/list/')
+    elif request.method == 'GET':
+        form = SourceForm()
+
+    context = {
+        'message': 'Source Create',
+        'form': form,
+    }
+    return render(request, 'source_create.html', context=context)
+
+
+def source_update(request, pk):
+    instance = get_object_or_404(Source, pk=pk)
+
+    if request.method == 'POST':
+        form_data = request.POST
+        form = SourceForm(form_data, instance=instance)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency/source/list/')
+    elif request.method == 'GET':
+        form = SourceForm(instance=instance)
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'source_update.html', context=context)
+
+
+def source_delete(request, pk):
+    instance = get_object_or_None(Source, pk=pk)
+    if instance is not None:
+        instance.delete()
+    return HttpResponseRedirect('/currency/source/list/')
+
+
+def contact_create(request):
+    if request.method == 'POST':
+        form_data = request.POST
+        form = ContactForm(form_data)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('/currency//list/')
+    elif request.method == 'GET':
+        form = SourceForm()
+
+    context = {
+        'message': 'Source Create',
+        'form': form,
+    }
+    return render(request, 'source_create.html', context=context)
+
+
+########################################################################################################################
 
 ################################ Домашняя работа 7 #####################################################################
 def source_list(request):

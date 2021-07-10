@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from currency.views import hello, generate_password, rate_list, rate_details, source_list, source_details, table_test, \
-    rate_create, rate_update, rate_delete
+    rate_create, rate_update, rate_delete, source_create, source_update, source_delete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -29,5 +29,8 @@ urlpatterns = [
     path('currency/rate/delete/<int:pk>/', rate_delete),
     path('currency/source/list/', source_list),
     path('currency/source/details/<int:pk>/', source_details),
+    path('currency/source/create/', source_create),
+    path('currency/source/update/<int:pk>/', source_update),
+    path('currency/source/delete/<int:pk>/', source_delete),
     path('table/', table_test)
 ]

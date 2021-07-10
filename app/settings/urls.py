@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from currency.views import hello, generate_password, rate_list, rate_details, source_list, source_details, table_test
+from currency.views import hello, generate_password, rate_list, rate_details, source_list, source_details, table_test, \
+    rate_create, rate_update, rate_delete
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,6 +24,9 @@ urlpatterns = [
     path('gen-pas/', generate_password),
     path('currency/rate/list/', rate_list),
     path('currency/rate/details/<int:pk>/', rate_details),
+    path('currency/rate/create/', rate_create),
+    path('currency/rate/update/<int:pk>/', rate_update),
+    path('currency/rate/delete/<int:pk>/', rate_delete),
     path('currency/source/list/', source_list),
     path('currency/source/details/<int:pk>/', source_details),
     path('table/', table_test)

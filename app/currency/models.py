@@ -10,11 +10,13 @@ class Rate(models.Model):
 
 
 class ContactUs(models.Model):
-    email_from = models.CharField(max_length=64)
-    subject = models.CharField(max_length=50)
-    message = models.CharField(max_length=100)
+    email_from = models.EmailField()
+    subject = models.CharField(max_length=255)
+    message = models.CharField(max_length=1024)
+    created = models.DateTimeField(auto_now_add=True)
 
 
-class Source(models.Model):
+
+class Bank(models.Model):
     name = models.CharField(max_length=64)
     url = models.CharField(max_length=64)

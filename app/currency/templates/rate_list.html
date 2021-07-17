@@ -1,22 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
 
-<a href="/currency/rate/create/">Create Rate</a>
+{% block main_content %}
+<a href="{% url 'index' %}">Main Page</a>
 
+<a href="{% url 'currency:rate-create' %}">Rate Create</a>
 
-{% for rate in objects %}
-    <p>
-        ID: {{ rate.id }}
-        Buy: {{ rate.buy }}
-        Sale: {{ rate.sale }}
-        <a href="/currency/rate/update/{{ rate.id }}">Edit</a>
-    </p>
-{% endfor %}
+<table class="table table-striped">
+    <tbody>
 
-</body>
-</html>
+    <caption>Rate</caption>
+
+    {% for rate in object_list %}
+    <tr>
+        <td>ID: {{ rate.id }}</td>
+        <td>Buy: {{ rate.buy }}</td>
+        <td>Sale: {{ rate.sale }}</td>
+        <td><a href="{% url 'currency:rate-details' pk=rate.id %}">Details</a></td>
+        <td><a href="{% url 'currency:rate-update' pk=rate.id %}">Edit</a></td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+
+</table>
+{% endblock main_content %}

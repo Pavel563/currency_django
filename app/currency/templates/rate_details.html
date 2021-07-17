@@ -1,10 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+
 {% if object %}
     <p>ID: {{ object.id }}</p>
     <p>Buy: {{ object.buy }}</p>
@@ -13,5 +11,6 @@
     <p>No Object Found</p>
 {% endif %}
 
-</body>
-</html>
+<a href="{% url 'currency:rate-list' %}">Rate List</a>
+
+{% endblock main_content %}

@@ -8,13 +8,14 @@ class Rate(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     source = models.CharField(max_length=64)
 
+    def __str__(self):
+        return f'Rate id: {self.id}'
+
 
 class ContactUs(models.Model):
     email_from = models.EmailField()
     subject = models.CharField(max_length=255)
     message = models.CharField(max_length=1024)
-    created = models.DateTimeField(auto_now_add=True)
-
 
 
 class Bank(models.Model):

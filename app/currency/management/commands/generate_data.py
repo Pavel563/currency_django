@@ -20,12 +20,12 @@ class Command(BaseCommand):
                 source=random.choice(['privatbank', 'monobank', 'vkurse']),
             )
 
-        for index in range(100):
-            ContactUs.objects.create(
-                email_from=str(fake.name()) + '@gmail.com',
-                subject=fake.text(),
-                message=fake.text(),
-            )
+        # for index in range(100):
+        #     ContactUs.objects.create(
+        #         email_from=str(fake.name()) + '@gmail.com',
+        #         subject=fake.text(),
+        #         message=fake.text(),
+        #     )
 
         for index in range(3):
             Bank.objects.create(

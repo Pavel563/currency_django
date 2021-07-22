@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
@@ -214,9 +215,27 @@ class CreateContactUs(CreateView):
         'subject',
         'message',
     )
+    # form_class = ContactForm
     success_url = reverse_lazy('index')
 
+    def form_valid(self, form):
+        data = form.cleaned_data
+        body = f"""
+        From: {data['email_from']}
+        Topic: {data['subject']}
+        
+        Message:
+        {data['message']}
+        """
 
+        send_mail(
+            'Contact Us from Client',
+            body,
+            'zvemrme@gmail.com',
+            ['pasha.shalimoff169@gmail.com'],
+            fail_silently=False,
+        )
+        return super().form_valid(form)
 # def contact_create(request):
 #     if request.method == 'POST':
 #         form_data = request.POST

@@ -19,3 +19,6 @@ freeze:
 
 shell:
 	$(manage_py) shell_plus --print-sql
+
+superuser:
+	$(manage_py) createsuperuser

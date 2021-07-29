@@ -1,4 +1,3 @@
-from django.core.mail import send_mail
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.http import HttpResponse, HttpResponseRedirect
@@ -7,6 +6,7 @@ from currency.models import Rate, Bank, ContactUs
 from currency.forms import RateForm, BankForm, ContactForm
 from annoying.functions import get_object_or_None
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from currency.tasks import send_email_in_background
 
 
 def hello(request):
@@ -228,14 +228,11 @@ class CreateContactUs(CreateView):
         {data['message']}
         """
 
-        send_mail(
-            'Contact Us from Client',
-            body,
-            'zvemrme@gmail.com',
-            ['pasha.shalimoff169@gmail.com'],
-            fail_silently=False,
-        )
+        send_email_in_background(body)
+
         return super().form_valid(form)
+
+
 # def contact_create(request):
 #     if request.method == 'POST':
 #         form_data = request.POST

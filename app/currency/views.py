@@ -255,4 +255,6 @@ class CreateContactUs(CreateView):
 def table_test(request):
     return render(request, 'table_test.html')
 
+
 ########################################################################################################################
+

@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+from celery.schedules import crontab
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
+
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -41,7 +44,9 @@ INSTALLED_APPS = [
     "annoying",
 
     'debug_toolbar',
+
     'rangefilter',
+
     'import_export',
 
     'currency',
@@ -132,8 +137,19 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 CELERY_BROKER_URL = 'amqp://localhost'
 
+CELERY_BEAT_SCHEDULE = {
+    'parse_privatbank': {
+        'task': 'currency.tasks.parse_privatbank',
+        'schedule': crontab(minute='*/1'),
+    },
+}
+
+
+# SHELL_PLUS_IMPORTS = [
+#     'from currency.tasks import parse_privatbank',
+# ]
+
 try:
     from settings.settings_local import *
 except ImportError:
     print('No local settings were found')
-

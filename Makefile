@@ -25,3 +25,9 @@ superuser:
 
 worker:
 	cd app && celery -A settings worker -l info
+
+beat:
+	cd app && celery -A settings beat -l info
+
+show_urls:
+	$(manage_py) show_urls

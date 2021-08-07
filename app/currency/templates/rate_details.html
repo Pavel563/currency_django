@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block main_content %}
+
+<a href="{% url 'index' %}">Home</a>
+
+{% if object %}
+    <p>ID: {{ object.id }}</p>
+    <p>Type: {{ object.type }}</p>
+    <p>Buy: {{ object.buy }}</p>
+    <p>Sale: {{ object.sale }}</p>
+    <p>Source: {{ object.source }}</p>
+{% else %}
+    <p>No Object Found</p>
+{% endif %}
+
+<a href="{% url 'currency:rate-list' %}">Rate List</a>
+
+{% endblock main_content %}

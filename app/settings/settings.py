@@ -61,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'currency.middlewares.AnalyticsMiddleware',
 ]
 
 ROOT_URLCONF = 'settings.urls'
@@ -140,7 +141,7 @@ CELERY_BROKER_URL = 'amqp://localhost'
 CELERY_BEAT_SCHEDULE = {
     'parse_privatbank': {
         'task': 'currency.tasks.parse_privatbank',
-        'schedule': crontab(minute='*/1'),
+        'schedule': crontab(minute='*/15'),
     },
 }
 

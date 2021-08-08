@@ -24,7 +24,7 @@
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ rate.id }}</td>
-            <td>{{ rate.type }}</td>
+            <td>{{ rate.get_type_display }}</td>
             <td>{{ rate.buy }}</td>
             <td>{{ rate.sale }}</td>
             <td>{{ rate.source }}</td>

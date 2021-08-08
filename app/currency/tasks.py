@@ -14,15 +14,21 @@ def _get_privatbank_currencies():
 @shared_task
 def parse_privatbank():
     from currency.models import Rate
+    from currency import choices
 
     currencies = _get_privatbank_currencies()
 
-    available_currency_types = ('USD', 'EUR')
+    available_currency_types = {
+        'USD': choices.RATE_TYPE_USD,
+        'EUR': choices.RATE_TYPE_EUR,
+    }
     source = 'privatbank'
 
     for curr in currencies:
         currency_type = curr['ccy']
         if currency_type in available_currency_types:
+            currency_type = available_currency_types[curr['ccy']]
+
             buy = to_decimal(curr['buy'])
             sale = to_decimal(curr['sale'])
 

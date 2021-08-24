@@ -31,7 +31,7 @@ def index(request):
 
 class RateListView(ListView):
     template_name = 'rate_list.html'
-    queryset = Rate.objects.all()
+    queryset = Rate.objects.all().select_related('bank')
 
 
 # def rate_details(request, pk):
@@ -74,7 +74,7 @@ class RateCreateView(CreateView):
         'type',
         'sale',
         'buy',
-        'source',
+        'bank',
     )
     success_url = reverse_lazy('currency:rate-list')
 

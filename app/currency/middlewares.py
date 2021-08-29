@@ -29,7 +29,7 @@ class AnalyticsMiddleware:
         #         request_method=request_method, path=request.path, counter=1)
         #
 
-        response = self.get_response(request)
+        # response = self.get_response(request)
         return response
 
 class ResponseCodeLogMiddleware:

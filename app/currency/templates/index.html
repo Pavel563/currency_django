@@ -1,7 +1,14 @@
 {% extends 'base.html' %}
 
 {% block main_content %}
-  <a href="{% url 'currency:rate-list' %}">Rate List</a>
-  <a href="{% url 'currency:bank-list' %}">Bank List</a>
-  <a href="{% url 'currency:contact-us-create' %}">Contact Us</a>
+    <a href="{% url 'currency:rate-list' %}">Rate List</a>
+    <a href="{% url 'currency:bank-list' %}">Bank List</a>
+    <a href="{% url 'currency:contact-us-create' %}">Contact Us</a>
+
+    {% if request.user.is_authentificated %}
+        <a href="{% url 'logout' %}">Logout</a>
+        <a href="{% url 'account:my-profile' %}">My Profile</a>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+    {% endif %}
 {% endblock main_content %}

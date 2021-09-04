@@ -17,16 +17,13 @@ def _get_privatbank_currencies(url):
 def parse_privatbank():
     from currency.models import Rate, Bank
 
-
     bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
-    currencies = _get_privatbank_currencies(bank.url)
+    currencies = _get_privatbank_currencies(choices.PRIVATBANK_API_URL)
 
     available_currency_types = {
         'USD': choices.RATE_TYPE_USD,
         'EUR': choices.RATE_TYPE_EUR,
     }
-
-    source = 'privatbank'
 
     for curr in currencies:
         currency_type = curr['ccy']

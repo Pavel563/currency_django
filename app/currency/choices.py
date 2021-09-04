@@ -7,6 +7,15 @@ RATE_TYPE_CHOICES = (
 
 )
 
+PRIVATBANK_API_URL = 'https://api.privatbank.ua/p24api/pubinfo?json&exchange&coursid=5'
+MONOBANK_API_URL = 'https://api.monobank.ua/bank/currency'
+
+SOURCE_URLS_CHOICES = (
+    PRIVATBANK_API_URL,
+    MONOBANK_API_URL,
+)
+
+
 REQUEST_METHOD_GET = 0
 REQUEST_METHOD_POST = 1
 

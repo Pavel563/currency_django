@@ -10,5 +10,6 @@
         <a href="{% url 'account:my-profile' %}">My Profile</a>
     {% else %}
         <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'account:singup' %}">Sing Up</a>
     {% endif %}
 {% endblock main_content %}

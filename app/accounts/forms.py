@@ -1,10 +1,11 @@
 import uuid
-
-import settings.settings
 from django import forms
+from django.conf import settings
+from django.urls import reverse
+
 from accounts.models import User
 from accounts.tasks import send_registration_email
-import django.conf
+
 
 class SingUpForm(forms.ModelForm):
 
@@ -15,7 +16,7 @@ class SingUpForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ('email', 'password1', 'password2')
+        fields = ('username', 'email', 'password1', 'password2')
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -27,9 +28,10 @@ class SingUpForm(forms.ModelForm):
             if cleaned_data['password1'] != cleaned_data['password2']:
                 # self.add_error('password', 'Passwords do not match.')
                 raise forms.ValidationError('Passwords do not match.')
+        return cleaned_data
 
     def save(self, commit=True):
-        instance = super().save(commit=commit)
+        instance = super().save(commit=False)
 
         instance.username = str(uuid.uuid4())
         instance.is_active = False
@@ -40,9 +42,9 @@ class SingUpForm(forms.ModelForm):
 
         body = f'''
         Activate Your Account
-        {django.conf.settings.DOMAIN}{reverse('account:activate-account', args=(instance.username,))}
+        {settings.DOMAIN}{reverse('account:activate-account', args=(instance.username,))}
         '''
 
-        send_registration_email.delay('TODO', instance.email)
+        send_registration_email.delay(body, instance.email)
 
         return instance

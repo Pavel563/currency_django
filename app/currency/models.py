@@ -1,6 +1,11 @@
 from django.db import models
 from currency import choices
 from currency import consts
+from django.templatetags.static import static
+
+
+def logo_directory_path(instance, filename):
+    return 'uploads/logos/{0}/{1}'.format(instance.name, filename)
 
 
 class Bank(models.Model):
@@ -8,9 +13,16 @@ class Bank(models.Model):
     code_name = models.CharField(
         max_length=64,
         unique=True,
-        )
+    )
     url = models.URLField()
     original_url = models.URLField()
+    logo = models.FileField(
+        null=True, blank=True, default=None, upload_to=logo_directory_path)
+
+    def get_logo_url(self):
+        if self.logo:
+            return self.logo.url
+        return static('img/default-avatar.png')
 
 
 class Rate(models.Model):

@@ -139,9 +139,11 @@ class BankCreateView(CreateView):
     model = Bank
     fields = (
         'name',
-        'url'
+        'url',
+        'logo',
     )
     success_url = reverse_lazy('currency:bank-list')
+
 
 
 # def bank_update(request, pk):
@@ -167,6 +169,7 @@ class BankUpdateView(UpdateView):
     template_name = 'bank_update.html'
     success_url = reverse_lazy('currency:bank-list')
     form_class = BankForm
+
 
 
 # def bank_delete(request, pk):

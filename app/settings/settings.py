@@ -52,10 +52,14 @@ INSTALLED_APPS = [
     'rangefilter',
 
     'import_export',
+    'active_link',
+    'crispy_forms',
 
     'currency',
     'accounts',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -134,6 +138,9 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = '/media/'
+MEDIA_ROOT = BASE_DIR / '..' / 'static_content'
+
 
 INTERNAL_IPS = [
     '127.0.0.1'
@@ -159,7 +166,11 @@ AUTH_USER_MODEL = 'accounts.User'
 
 LOGIN_REDIRECT_URL = reverse_lazy('index')
 
-DOMAIN = 'http://127.0.0.1:8000/'    #TODO
+DOMAIN = 'http://127.0.0.1:8000'  # TODO
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'currency' / 'static',
+]
 
 try:
     from settings.settings_local import *

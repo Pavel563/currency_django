@@ -20,6 +20,7 @@
             <td>{{ bank.id }}</td>
             <td>{{ bank.name }}</td>
             <td>{{ bank.url }}</td>
+            <td><a href="{% url 'currency:bank-details' pk=bank.id %}">Details</a></td>
             <td><a href="{% url 'currency:bank-update' pk=bank.id %}">Edit</a></td>
         </tr>
     {% endfor %}

@@ -40,8 +40,7 @@ class ResponseCodeLogMiddleware:
 
         response = self.get_response(request)
 
-        if response.status_code == 200:
-            status_code = ResponseCodeLog.objects.create()
+        ResponseCodeLog.objects.create(status_code=request.status_code)
 
 
         return response

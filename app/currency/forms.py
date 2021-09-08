@@ -20,6 +20,7 @@ class BankForm(forms.ModelForm):
         fields = (
             'name',
             'url',
+            'logo',
         )
 
 

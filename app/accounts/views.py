@@ -4,8 +4,10 @@ from django.views.generic import UpdateView, CreateView, RedirectView
 from accounts.models import User
 from django.urls import reverse_lazy
 from accounts.forms import SingUpForm
-from django.core.checks import messages
+from django.contrib import messages
 from accounts.tokens import account_activation_token
+from annoying.functions import get_object_or_None
+
 
 class MyProfile(UpdateView):
     queryset = User.objects.all()
@@ -14,6 +16,7 @@ class MyProfile(UpdateView):
     fields = (
         'first_name',
         'last_name',
+        'avatar',
     )
 
     # def get_queryset(self):
@@ -27,7 +30,7 @@ class MyProfile(UpdateView):
 
 class SingUp(CreateView):
     model = User
-    template_name = 'singup.html'
+    template_name = 'signup.html'
     success_url = reverse_lazy('index')
     form_class = SingUpForm
 
@@ -49,9 +52,10 @@ class ActivateAccount(RedirectView):
                     self.request, 'Your account is already activated'
                 )
             else:
-                massages.info(self.request, 'Thanks for activating your account')
+                messages.info(
+                    self.request, 'Thanks for activating your account.')
                 user.is_active = True
-                user.save()
+                user.save(update_fields=('is_active',))
 
         response = super().get_redirect_url(*args, **kwargs)
         return response
@@ -71,24 +75,3 @@ class ActivateAccount(RedirectView):
             return redirect('index')
         else:
             return render(request, 'account_activation_invalid.html')
-
-    def signup(request):
-        if request.method == 'POST':
-            form = SignUpForm(request.POST)
-            if form.is_valid():
-                user = form.save(commit=False)
-                user.is_active = False
-                user.save()
-                current_site = get_current_site(request)
-                subject = 'Activate Your MySite Account'
-                message = render_to_string('account_activation_email.html', {
-                    'user': user,
-                    'domain': current_site.domain,
-                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-                    'token': account_activation_token.make_token(user),
-                })
-                user.email_user(subject, message)
-                return redirect('account_activation_sent')
-        else:
-            form = SignUpForm()
-        return render(request, 'signup.html', {'form': form})

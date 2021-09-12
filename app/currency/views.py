@@ -5,7 +5,7 @@ from currency.utils import generate_password as gp
 from currency.models import Rate, Bank, ContactUs
 from currency.forms import RateForm, BankForm, ContactForm
 from annoying.functions import get_object_or_None
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, View
 from currency.tasks import send_email_in_background
 
 
@@ -234,6 +234,22 @@ class CreateContactUs(CreateView):
         send_email_in_background(body)
 
         return super().form_valid(form)
+
+# class RateListApi(View):
+#     def get(self, request):
+#         rates = Rate.objects.all()
+#         results = []
+#         for rate in rates:
+#             results.append({
+#                 'id': rate.id,
+#                 'sale': float(rate.sale),
+#                 'buy': float(rate.buy),
+#                 'bank': rate.bank_id,
+#             })
+#         import json
+#         return JsonResponse(results, safe=False)
+#         return HttpResponse(json.dumps(results), content_type='application/json')
+
 
 
 # def contact_create(request):

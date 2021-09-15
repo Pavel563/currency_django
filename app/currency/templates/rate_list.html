@@ -29,8 +29,12 @@
             <td>{{ rate.sale }}</td>
             <td>{{ rate.bank.name }}</td>
             <td>{{ rate.created }}</td>
-            <td><a href="{% url 'currency:rate-details' pk=rate.id %}">Details</a></td>
-            <td><a href="{% url 'currency:rate-update' pk=rate.id %}">Edit</a></td>
+            {% if request.user.is_authenticated %}
+                <td><a href="{% url 'currency:rate-details' pk=rate.id %}">Details</a></td>
+            {% endif %}
+            {% if request.user.is_superuser %}
+                <td><a href="{% url 'currency:rate-update' pk=rate.id %}">Edit</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
         </tbody>

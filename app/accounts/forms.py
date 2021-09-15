@@ -48,3 +48,31 @@ class SingUpForm(forms.ModelForm):
         send_registration_email.delay(body, instance.email)
 
         return instance
+
+class ChangePasswordForm(forms.ModelForm):
+    current_password = forms.CharField(widget=forms.PasswordInput())
+    new_password = forms.CharField(widget=forms.PasswordInput())
+    confirm_new_password = forms.CharField(widget=forms.PasswordInput())
+
+    class Meta:
+        model = User
+        fields = ('current_password', 'new_password', 'confirm_new_password')
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not self.errors:
+            if cleaned_data['current_password'] == cleaned_data['new_password']:
+                raise forms.ValidationError('New password same as old(.')
+            if cleaned_data['new_password'] != cleaned_data['confirm_new_password']:
+                raise forms.ValidationError('Passwords do not match.')
+        return cleaned_data
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        instance.set_password(self.cleaned_data['new_password'])
+
+        if commit:
+            instance.save()
+
+        return instance

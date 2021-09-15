@@ -249,6 +249,21 @@ class CreateContactUs(CreateView):
 #         import json
 #         return JsonResponse(results, safe=False)
 #         return HttpResponse(json.dumps(results), content_type='application/json')
+#
+# class BankListApi(View):
+#     def get(self, request):
+#         rates = Bank.objects.all()
+#         results = []
+#         for rate in rates:
+#             results.append({
+#                 'id': rate.id,
+#                 'sale': float(rate.sale),
+#                 'buy': float(rate.buy),
+#                 'bank': rate.bank_id,
+#             })
+#         import json
+#         return JsonResponse(results, safe=False)
+#         return HttpResponse(json.dumps(results), content_type='application/json')
 
 
 

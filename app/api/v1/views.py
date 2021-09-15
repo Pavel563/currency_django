@@ -1,9 +1,9 @@
 from rest_framework import generics
 from api.v1.filters import RateFilter
-from api.v1.paginators import RatePagination
+from api.v1.paginator import RatePagination
 from api.v1.throttles import AnonUserRateThrottle
-from currency.models import Rate
-from api.v1.serializers import RateSerializer, RateDetailsSerializer
+from currency.models import Rate, Bank, ContactUs
+from api.v1.serializers import RateSerializer, RateDetailsSerializer, BankSerializer
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -37,11 +37,21 @@ class RateTypeChoicesView(APIView):
         """
         return Response(choices.RATE_TYPE_CHOICES)
 
+
+# class BankList(generics.ListCreateAPIView):
+#     queryset = Bank.objects.all()
+#     serializer_class = BankSerializer
+#
+#
+# class BankDetails(generics.RetrieveUpdateDestroyAPIView):
+#     queryset = Bank.objects.all()
+#     serializer_class = BankSerializer
+#
 # class RateList(generics.ListCreateAPIView):
 #     queryset = Rate.objects.all()
 #     serializer_class = RateSerializer
-
-
+#
+#
 # class RateDetails(generics.RetrieveUpdateDestroyAPIView):
 #     queryset = Rate.objects.all()
 #     serializer_class = RateSerializer

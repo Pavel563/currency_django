@@ -249,6 +249,6 @@ STATICFILES_DIRS = [
 ]
 
 try:
-    from settings.settings_local import *
+    from settings.settings_test import *
 except ImportError:
     print('No local settings were found')

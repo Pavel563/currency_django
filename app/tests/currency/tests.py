@@ -76,7 +76,7 @@ def test_create_contact_us(client, mailoutbox, settings, fake):
     assert response.url == '/'
     assert len(mailoutbox) == 1
     mail = mailoutbox[0]
-    assert mail.to == ['fenderoksp@gmail.com']
+    assert mail.to == ['pasha.shalimoff169@gmail.com']
     assert mail.cc == []
     assert mail.bcc == []
     assert mail.reply_to == []

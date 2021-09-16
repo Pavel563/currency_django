@@ -5,3 +5,4 @@ from settings.settings import *
 # DEFAULT_FROM_EMAIL = 'zvemrme@gmail.com'
 
 DEBUG = False
+CELERY_TASK_ALWAYS_EAGER = True

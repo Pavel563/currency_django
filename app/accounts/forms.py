@@ -59,8 +59,11 @@ class ChangePasswordForm(forms.ModelForm):
         fields = ('current_password', 'new_password', 'confirm_new_password')
 
     def clean(self):
+        old_password = SingUpForm.clean(cleaned_data['password1'])
         cleaned_data = super().clean()
         if not self.errors:
+            if cleaned_data['current_password'] !=  old_password:
+                raise forms.ValidationError('Its not your old password.')
             if cleaned_data['current_password'] == cleaned_data['new_password']:
                 raise forms.ValidationError('New password same as old(.')
             if cleaned_data['new_password'] != cleaned_data['confirm_new_password']:

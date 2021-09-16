@@ -18,7 +18,7 @@ def parse_privatbank():
     from currency.models import Rate, Bank
 
     bank = Bank.objects.get(code_name=consts.CODE_NAME_PRIVATBANK)
-    currencies = _get_currencies(choices.PRIVATBANK_API_URL)
+    currencies = _get_currencies(consts.PRIVATBANK_API_URL)
 
     available_currency_types = {
         'USD': choices.RATE_TYPE_USD,
@@ -58,7 +58,7 @@ def parse_monobank():
     from currency.models import Rate, Bank
 
     bank = Bank.objects.get(code_name=consts.CODE_NAME_MONOBANK)
-    currencies = _get_currencies(choices.MONOBANK_API_URL)
+    currencies = _get_currencies(consts.MONOBANK_API_URL)
 
     available_currency_types = {
         'USD': choices.RATE_TYPE_USD,
@@ -72,6 +72,46 @@ def parse_monobank():
 
             buy = to_decimal(curr['rateBuy'])
             sale = to_decimal(curr['rateSell'])
+
+            previous_rate = Rate.objects.filter(
+                bank=bank, type=currency_type
+            ).order_by("created").last()
+
+            # Check if new rate should be create
+            if (
+                    previous_rate is None or
+                    previous_rate.sale != sale or
+                    previous_rate.buy != buy
+            ):
+                print(f'New rate was creates: {sale} {buy}')
+                Rate.objects.create(
+                    type=currency_type,
+                    sale=sale,
+                    buy=buy,
+                    bank=bank,
+                )
+            else:
+                print(f'Rate already exists: {sale} {buy}')
+
+@shared_task
+def parse_nbu():
+    from currency.models import Rate, Bank
+
+    bank = Bank.objects.get(code_name=consts.CODE_NAME_NBU)
+    currencies = _get_currencies(consts.NBU_API_URL)
+
+    available_currency_types = {
+        'USD': choices.RATE_TYPE_USD,
+        'EUR': choices.RATE_TYPE_EUR,
+    }
+
+    for curr in currencies:
+        currency_type = curr['cc']
+        if currency_type in available_currency_types:
+            currency_type = available_currency_types[curr['cc']]
+
+            buy = to_decimal(curr['rate'])
+            sale = None
 
             previous_rate = Rate.objects.filter(
                 bank=bank, type=currency_type

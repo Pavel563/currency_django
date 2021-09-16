@@ -1,9 +1,12 @@
 RATE_TYPE_USD = 840
 RATE_TYPE_EUR = 978
+RATE_TYPE_UAH = 980
 
 RATE_TYPE_CHOICES = (
     (RATE_TYPE_USD, 'Dollar'),
     (RATE_TYPE_EUR, 'Euro'),
+    (RATE_TYPE_UAH, 'UAH'),
+
 
 )
 

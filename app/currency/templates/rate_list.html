@@ -1,9 +1,18 @@
 {% extends 'base.html' %}
 
-{% block main_content %}
-<a href="{% url 'index' %}">Home</a>
+{% load pagination %}
 
-<a href="{% url 'currency:rate-create' %}">Rate Create</a>
+{% block main_content %}
+    <a href="{% url 'index' %}">Home</a>
+
+    <a href="{% url 'currency:rate-create' %}">Rate Create</a>
+
+    <form method="get">
+        {{ filter.form.as_p }}
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span> Apply Filters
+        </button>
+    </form>
 
     <table class="table table-striped">
         <thead>
@@ -40,4 +49,7 @@
         </tbody>
     </table>
 
+    {% if is_paginated %}
+      {% pagination page_obj %}
+    {% endif %}
 {% endblock main_content %}

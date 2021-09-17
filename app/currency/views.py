@@ -12,6 +12,9 @@ from django.views.decorators.cache import cache_page
 from django.utils.decorators import method_decorator
 from currency import consts
 
+from django_filters.views import FilterView
+from currency.filters import RateFilter
+
 
 def hello(request):
     return HttpResponse("Hello World!")
@@ -33,9 +36,11 @@ def index(request):
 #     }
 #     return render(request, 'rate_list.html', context=context)
 
-class RateListView(ListView):
+class RateListView(FilterView):
     template_name = 'rate_list.html'
     queryset = Rate.objects.all().select_related('bank')
+    paginate_by = 25
+    filterset_class = RateFilter
 
 
 # def rate_details(request, pk):

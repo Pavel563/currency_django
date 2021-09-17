@@ -17,6 +17,8 @@ class MyProfile(UpdateView):
         'first_name',
         'last_name',
         'avatar',
+        'phone',
+        'email',
     )
 
     # def get_queryset(self):

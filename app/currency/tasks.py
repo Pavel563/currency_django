@@ -1,4 +1,5 @@
 from celery import shared_task
+from django.core.cache import cache
 from django.core.mail import send_mail
 from currency.utils import to_decimal
 from currency import choices
@@ -25,6 +26,8 @@ def parse_privatbank():
         'EUR': choices.RATE_TYPE_EUR,
     }
 
+    clear_cache = False
+
     for curr in currencies:
         currency_type = curr['ccy']
         if currency_type in available_currency_types:
@@ -50,8 +53,12 @@ def parse_privatbank():
                     buy=buy,
                     bank=bank,
                 )
+                clear_cache = True
             else:
                 print(f'Rate already exists: {sale} {buy}')
+
+    if clear_cache:
+        cache.delete(consts.CACHE_KEY_LATEST_RATES)
 
 @shared_task
 def parse_monobank():

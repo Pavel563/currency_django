@@ -172,6 +172,22 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'currency.tasks.parse_privatbank',
         'schedule': crontab(minute='*/1'),
     },
+    'parse_monobank': {
+        'task': 'currency.tasks.parse_monobank',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_nbu': {
+        'task': 'currency.tasks.parse_nbu',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_fixer': {
+        'task': 'currency.tasks.parse_fixer',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_exchange': {
+        'task': 'currency.tasks.parse_exchange',
+        'schedule': crontab(minute='*/1'),
+    },
 }
 
 

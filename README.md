@@ -14,3 +14,5 @@ sudo service rabbitmq-server start
 sudo service rabbitmq-server stop
 
 sudo apt-get remove --auto-remove rabbitmq-server
+
+/mnt/d/Python/Hillel/Advance Python/Lessons/currency_lessons/currency_django/static_content/static

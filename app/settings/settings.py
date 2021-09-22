@@ -155,9 +155,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-MEDIA_ROOT = '/media/'
-MEDIA_ROOT = BASE_DIR / '..' / 'static_content'
+STATIC_ROOT = BASE_DIR / '..' / 'static_content' / 'static'
+# STATIC_ROOT = '/tmp/static'
 
+MEDIA_ROOT = '/media/'
+MEDIA_ROOT = BASE_DIR / '..' / 'static_content' / 'media'
 
 INTERNAL_IPS = [
     '127.0.0.1'

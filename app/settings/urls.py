@@ -1,11 +1,34 @@
-import debug_toolbar
+import accounts
+
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from currency.views import index
+from django.conf import settings
+
+# from api.v1.views import RateList, RateDetails
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    # path('rates/', RateList.as_view()),
+    # path('rates/<int:pk>/', RateDetails.as_view()),
+
+    path('api/v1/', include('api.v1.urls')),
+
     path('', index, name='index'),
+    path('auth/', include('django.contrib.auth.urls')),
     path('currency/', include('currency.urls')),
-    path('__debug__/', include(debug_toolbar.urls)),
+    path('accounts/', include('accounts.urls')),
 ]
+
+if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns.append(
+        path('__debug__/', include(debug_toolbar.urls))
+    )
+
+
+urlpatterns.extend(static(settings.STATIC_URL, document_root=settings.STATIC_ROOT))
+urlpatterns.extend(static(settings.MEDIA_URL, document_root=settings.MEDIA_URL))

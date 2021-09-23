@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block main_content %}
+
+    <img src="{{ request.user.get_avatar_url }}"/>
+
+    Update My Profile
+    <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit">Save</button>
+    </form>
+
+{% endblock main_content %}

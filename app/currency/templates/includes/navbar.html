@@ -1,0 +1,30 @@
+{% load active_link_tags %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="navbarText">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'index' %}" href="{% url 'index' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'currency:rate-list' %}" href="{% url 'currency:rate-list' %}">Rate List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'currency:rate-latest' %}" href="{% url 'currency:rate-latest' %}">Latest Rates</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'currency:bank-list' %}" href="{% url 'currency:bank-list' %}">Bank List</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link {% active_link 'currency:contact-us-create' %}" href="{% url 'currency:contact-us-create' %}">Contact Us</a>
+                </li>
+            </ul>
+            {% if request.user.is_authenticated %}
+                <span class="navbar-text"><a href="{% url 'logout' %}">Logout</a><a href="{% url 'account:my-profile' %}">My Profile</a></span>
+            {% else %}
+                <span class="navbar-text"><a href="{% url 'login' %}">Login</a> <a href="{% url 'account:signup' %}">Sign Up</a></span>
+            {% endif %}
+        </div>
+    </div>
+</nav>

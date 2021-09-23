@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
+import os
 from pathlib import Path
+
+import django.urls
 from celery.schedules import crontab
+from django.urls import reverse_lazy
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 
@@ -48,9 +53,28 @@ INSTALLED_APPS = [
     'rangefilter',
 
     'import_export',
+    'active_link',
+    'crispy_forms',
+    'rest_framework',
+    'rest_framework_simplejwt',
+    'drf_yasg',
+    'django_filters',
 
     'currency',
+    'accounts',
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.PyMemcacheCache',
+        'LOCATION': f'{os.getenv("MEMCACHED_HOST", "localhost")}:{os.getenv("MEMCACHED_PORT", "11211")}',
+    }
+}
+
+
+# SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -61,7 +85,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'currency.middlewares.AnalyticsMiddleware',
 ]
+
+
 
 ROOT_URLCONF = 'settings.urls'
 
@@ -128,6 +155,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / '..' / 'static_content' / 'static'
+# STATIC_ROOT = '/tmp/static'
+
+MEDIA_ROOT = '/media/'
+MEDIA_ROOT = BASE_DIR / '..' / 'static_content' / 'media'
 
 INTERNAL_IPS = [
     '127.0.0.1'
@@ -142,14 +174,111 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'currency.tasks.parse_privatbank',
         'schedule': crontab(minute='*/1'),
     },
+    'parse_monobank': {
+        'task': 'currency.tasks.parse_monobank',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_nbu': {
+        'task': 'currency.tasks.parse_nbu',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_fixer': {
+        'task': 'currency.tasks.parse_fixer',
+        'schedule': crontab(minute='*/1'),
+    },
+    'parse_exchange': {
+        'task': 'currency.tasks.parse_exchange',
+        'schedule': crontab(minute='*/1'),
+    },
 }
 
 
-# SHELL_PLUS_IMPORTS = [
-#     'from currency.tasks import parse_privatbank',
-# ]
+SHELL_PLUS_IMPORTS = [
+    'from currency.tasks import parse_privatbank',
+]
+
+AUTH_USER_MODEL = 'accounts.User'
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+
+DOMAIN = 'http://127.0.0.1:8000'  # TODO
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'rates_anon_trottle': '2/min',
+    },
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=14),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer', 'JWT',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    'JTI_CLAIM': 'jti',
+
+    'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        "api_key": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        },
+    },
+}
+
+# LOGGING = {
+#     'version': 1,
+#     'filters': {
+#         'require_debug_true': {
+#             '()': 'django.utils.log.RequireDebugTrue',
+#         }
+#     },
+#     'handlers': {
+#         'console': {
+#             'level': 'DEBUG',
+#             'filters': ['require_debug_true'],
+#             'class': 'logging.StreamHandler',
+#         }
+#     },
+#     'loggers': {
+#         'django.db.backends': {
+#             'level': 'DEBUG',
+#             'handlers': ['console'],
+#         }
+#     }
+# }
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'currency' / 'static',
+]
 
 try:
-    from settings.settings_local import *
+    from settings.settings_test import *
 except ImportError:
     print('No local settings were found')

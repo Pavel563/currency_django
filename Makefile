@@ -31,3 +31,14 @@ beat:
 
 show_urls:
 	$(manage_py) show_urls
+
+pytest:
+	pytest app/tests/ --cov=app --cov-report html
+
+show-coverage:  ## open coverage HTML report in default browser
+	python3 -c "import webbrowser; webbrowser.open('.pytest_cache/coverage/index.html')"
+
+gunicorn:
+	cd app && gunicorn -w 4 settings.wsgi:application -b 0.0.0.0:8001 --log-level=DEBUG
+
+

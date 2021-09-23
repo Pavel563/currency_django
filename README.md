@@ -3,14 +3,16 @@
 
 Notes:
 
-$ python3 -m venv env
+python3 -m venv env
 
-$ . env/bin/activate
+. env/bin/activate
 
-$ sudo apt-get install rabbitmq-server
+sudo apt-get install rabbitmq-server
 
-$ sudo service rabbitmq-server start
+sudo service rabbitmq-server start
 
-$ sudo service rabbitmq-server stop
+sudo service rabbitmq-server stop
 
-$ sudo apt-get remove --auto-remove rabbitmq-server
+sudo apt-get remove --auto-remove rabbitmq-server
+
+/mnt/d/Python/Hillel/Advance Python/Lessons/currency_lessons/currency_django/static_content/static

@@ -10,7 +10,7 @@ class RateForm(forms.ModelForm):
             'type',
             'sale',
             'buy',
-            'source',
+            'bank',
         )
 
 
@@ -20,6 +20,7 @@ class BankForm(forms.ModelForm):
         fields = (
             'name',
             'url',
+            'logo',
         )
 
 

@@ -1,16 +1,38 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"-->
+<!--          rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"-->
+<!--          crossorigin="anonymous">-->
+
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" %}></link>
+
 </head>
 <body>
+
+<!--{% if messages %}-->
+<!--    <ul class="messages">-->
+<!--        {% for message in messages %}-->
+<!--        <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>-->
+<!--        {% endfor %}-->
+<!--    </ul>-->
+<!--{% endif %}-->
+
+{% include 'includes/navbar.html' %}
 
 {% block main_content %}
 
 
 {% endblock main_content %}
 
+<!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
 
 </body>
 </html>

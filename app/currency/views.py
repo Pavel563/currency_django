@@ -5,8 +5,15 @@ from currency.utils import generate_password as gp
 from currency.models import Rate, Bank, ContactUs
 from currency.forms import RateForm, BankForm, ContactForm
 from annoying.functions import get_object_or_None
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, View, TemplateView
 from currency.tasks import send_email_in_background
+from django.core.cache import cache
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
+from currency import consts
+
+from django_filters.views import FilterView
+from currency.filters import RateFilter
 
 
 def hello(request):
@@ -29,9 +36,11 @@ def index(request):
 #     }
 #     return render(request, 'rate_list.html', context=context)
 
-class RateListView(ListView):
+class RateListView(FilterView):
     template_name = 'rate_list.html'
-    queryset = Rate.objects.all()
+    queryset = Rate.objects.all().select_related('bank')
+    paginate_by = 25
+    filterset_class = RateFilter
 
 
 # def rate_details(request, pk):
@@ -74,7 +83,7 @@ class RateCreateView(CreateView):
         'type',
         'sale',
         'buy',
-        'source',
+        'bank',
     )
     success_url = reverse_lazy('currency:rate-list')
 
@@ -102,6 +111,30 @@ class RateUpdateView(UpdateView):
     template_name = 'rate_update.html'
     success_url = reverse_lazy('currency:rate-list')
     form_class = RateForm
+
+def get_latest_rates():
+    if consts.CACHE_KEY_LATEST_RATES in cache:
+        return cache.get(consts.CACHE_KEY_LATEST_RATES)
+
+    object_list = []
+    for bank in Bank.objects.all():
+        for ct_value, ct_display in choices.RATE_TYPE_CHOICES:
+            latest_rate = Rate.objects \
+                .filter(type=ct_value, bank=bank).order_by('-created').first()
+            if latest_rate is not None:
+                object_list.append(latest_rate)
+
+    cache.set(consts.CACHE_KEY_LATEST_RATES, object_list, 60 * 60 * 8)
+    return object_list
+
+# @method_decorator(cache_page(60 * 60 * 8), name='dispatch')
+class LatestRates(TemplateView):
+    template_name = 'latest_rates.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['object_list'] = get_latest_rates()
+        return context
 
 
 # def rate_delete(request, pk):
@@ -139,9 +172,11 @@ class BankCreateView(CreateView):
     model = Bank
     fields = (
         'name',
-        'url'
+        'url',
+        'logo',
     )
     success_url = reverse_lazy('currency:bank-list')
+
 
 
 # def bank_update(request, pk):
@@ -167,6 +202,7 @@ class BankUpdateView(UpdateView):
     template_name = 'bank_update.html'
     success_url = reverse_lazy('currency:bank-list')
     form_class = BankForm
+
 
 
 # def bank_delete(request, pk):
@@ -231,6 +267,37 @@ class CreateContactUs(CreateView):
         send_email_in_background(body)
 
         return super().form_valid(form)
+
+# class RateListApi(View):
+#     def get(self, request):
+#         rates = Rate.objects.all()
+#         results = []
+#         for rate in rates:
+#             results.append({
+#                 'id': rate.id,
+#                 'sale': float(rate.sale),
+#                 'buy': float(rate.buy),
+#                 'bank': rate.bank_id,
+#             })
+#         import json
+#         return JsonResponse(results, safe=False)
+#         return HttpResponse(json.dumps(results), content_type='application/json')
+#
+# class BankListApi(View):
+#     def get(self, request):
+#         rates = Bank.objects.all()
+#         results = []
+#         for rate in rates:
+#             results.append({
+#                 'id': rate.id,
+#                 'sale': float(rate.sale),
+#                 'buy': float(rate.buy),
+#                 'bank': rate.bank_id,
+#             })
+#         import json
+#         return JsonResponse(results, safe=False)
+#         return HttpResponse(json.dumps(results), content_type='application/json')
+
 
 
 # def contact_create(request):
